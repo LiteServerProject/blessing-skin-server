@@ -1,0 +1,10 @@
+[Unit]
+Description=BlessingSkin Server Init
+
+[Service]
+ExecStart=/usr/bin/chown -R www-data:www-data /data
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
