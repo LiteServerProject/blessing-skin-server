@@ -30,5 +30,5 @@ ENTRYPOINT ["/bin/systemd"]
 # install
 RUN apt update && apt install -y nginx php-fpm php-pdo php-mbstring php-tokenizer php-gd php-xml php-ctype php-json php-fileinfo php-zip php-mysql && rm -rf /var/lib/apt/lists/*
 COPY default.conf /etc/nginx/sites-enabled/default
-COPY skin-init.service /lib/systemd/system/
+COPY skin-init.service /etc/systemd/system/
 RUN systemctl enable skin-init
