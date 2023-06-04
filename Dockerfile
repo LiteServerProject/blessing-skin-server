@@ -3,16 +3,14 @@ FROM ubuntu:latest
 RUN sed -i 's/archive.ubuntu.com/mirrors.cloud.tencent.com/g; s/security.ubuntu.com/mirrors.cloud.tencent.com/g' /etc/apt/sources.list \
     && rm -f /etc/apt/apt.conf.d/docker-gzip-indexes
 
+# configure tzdata
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
+
 # add systemd
 RUN apt update \
-  && echo 'tzdata tzdata/Areas select Asia' >> /root/preseed.cfg \
-  && echo 'tzdata tzdata/Zones/Asia select Shanghai' >> /root/preseed.cfg \
-  && debconf-set-selections /root/preseed.cfg \
-  && rm -f /etc/timezone /etc/localtime \
   && DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt install -y systemd \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* /var/tmp/* \
-  && rm /root/preseed.cfg \
   && sed 's/ProtectHostname=yes/ProtectHostname=no/g' -i /lib/systemd/system/systemd-logind.service \
   && cd /lib/systemd/system/sysinit.target.wants/ \
   && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
